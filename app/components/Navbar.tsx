@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { UserAuth } from "../context/AuthContext";
 import { auth } from "../firebase";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const Navbar = () => {
   const { user, logOut, googleSignIn, isAuthLoading } = UserAuth() || {};
@@ -45,17 +50,23 @@ const Navbar = () => {
         <div>Loading...</div>
       ) : (
         <>
-          {!user ? (
-            <div className="flex gap-5">
-              <button onClick={handleSignIn}>Login</button>
-              <button onClick={handleSignIn}>Sign up</button>
-            </div>
-          ) : (
-            <div className="flex gap-5">
-              <div>Welcome {user?.displayName}</div>
-              <button onClick={handleSignOut}>Log out</button>
-            </div>
-          )}
+          <Popover>
+            <PopoverTrigger>LogIn</PopoverTrigger>
+            <PopoverContent>
+              {" "}
+              {!user ? (
+                <div className="flex flex-col gap-2">
+                  <button onClick={handleSignIn}>Login with google</button>
+                  <a href="/signup">Sign up</a>
+                </div>
+              ) : (
+                <div className="flex gap-5">
+                  <div>Welcome {user?.displayName}</div>
+                  <button onClick={handleSignOut}>Log out</button>
+                </div>
+              )}
+            </PopoverContent>
+          </Popover>
         </>
       )}
     </nav>
