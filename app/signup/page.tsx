@@ -6,8 +6,15 @@ import { useState } from "react";
 import { auth } from "../firebase";
 
 export default function SignUp() {
-  const { email, setEmail, password, setPassword, isAuthLoading, register } =
-    UserAuth() || {};
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    isAuthLoading,
+    register,
+    user,
+  } = UserAuth() || {};
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
