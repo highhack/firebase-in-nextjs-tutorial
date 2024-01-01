@@ -11,6 +11,8 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { UserAuth } from "./context/AuthContext";
+import { Input } from "@/components/ui/input";
+import axios from "./../lib/axios";
 
 interface Item {
   id?: string;
@@ -60,6 +62,44 @@ export default function Home() {
     return () => unsubscribe();
   }, []);
 
+  const [data, setData] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = axios
+        .get("/helloWorld")
+        .then((response) => {
+          console.log("response", response);
+          return response.data;
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+      const result = await response;
+      setData(result);
+    };
+    // axios
+    //   .get("/helloWorld")
+    //   .then((response) => {
+    //     console.log(response.data);
+    //   })
+    //   .catch((error) => {
+    //     if (error.response) {
+    //       // The request was made and the server responded with a status code
+    //       console.error("Response error:", error.response.data);
+    //       console.error("Status code:", error.response.status);
+    //     } else if (error.request) {
+    //       // The request was made but no response was received
+    //       console.error("No response received:", error.request);
+    //     } else {
+    //       // Something happened in setting up the request that triggered an Error
+    //       console.error("Error:", error.message);
+    //     }
+    //   });
+
+    fetchData();
+  }, []);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm flex flex-col">
@@ -70,7 +110,7 @@ export default function Home() {
             <div className="text-4xl text-center ">Firebase project</div>
 
             <form className="flex  gap-4">
-              <input
+              <Input
                 type="text"
                 placeholder="item name"
                 value={newItem.name}
@@ -79,7 +119,7 @@ export default function Home() {
                 }
               />
 
-              <input
+              <Input
                 type="number"
                 placeholder="item $"
                 value={newItem.price}
@@ -111,6 +151,7 @@ export default function Home() {
               ))}
             </ul>
             <div>Total: {total}</div>
+            <h2 className="w-full flex justify-center">{data}</h2>
           </div>
         ) : (
           "you are not logged in"
